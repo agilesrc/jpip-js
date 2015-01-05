@@ -9,7 +9,6 @@
  * Public License, a copy of which can be found in LICENSE.txt at the root of the project directory,
  * or at http://www.gnu.org/licenses/gpl.txt.
  */
-
 (function ($) {
   $.fn.jpipViewer = function(image, options) {
     return this.each(function() {
@@ -45,6 +44,8 @@
       svcValFmt: 'info:ofi/fmt:kev:mtx:jpeg2000',
       svcId: 'info:lanl-repo/svc/getRegion'
     }, options);
+
+    var imageView;
 
     var url = options.server + '?url_ver=Z39.88-2004&rft_id=' + options.image + '&svc_id=info:lanl-repo/svc/getMetadata';
     $.getJSON(url, setup);
@@ -147,12 +148,6 @@
       var container = $('<div class="jpipContainer">');
       container.css({width: options.minX, height: 20});
 
-      // Set up a div to slide toggle the UI
-      var toolbar = $('<div class="jpipViewer-toolbar">');
-      toolbar.css({width: options.minX});
-      toolbar.on('dblclick', $('navUI').slideToggle);
-      container.append(toolbar);
-
       // Set up the main navigation div
       var navDiv = $('<div class="jpipNavigation">');
       navDiv.css({width: options.minX, height: options.minY});
@@ -167,27 +162,41 @@
       navDiv.append(image);
 
       // Div so we can see where we are when we are zoomed in
-      var viewport = $('<div class="jpipViewer-viewport">');
+      var viewport = $('<div class="jpipViewer-viewport" />');
       viewport.css({width: Math.floor(options.minX / 2), height: Math.floor(options.minY / 2)});
 
       navDiv.append(viewport);
 
       // Set up the UI for navigation
-      var navigationUI = $('<div class="jpipViewer-navUI">');
-      navigationUI.html('<a class="jpipViewer-left" /><a class="jpipViewer-up" /><a class="jpipViewer-right" /><br/><a class="jpipViewer-down" /><br/><a class="jpipViewer-zoomIn" /><a class="jpipViewer-zoomOut" /><a class="jpipViewer-reset" />');
+      var navigationUI = $('<div class="jpipViewer-navUI" />');
 
+      var upButton      = $('<a class="jpipViewer-button jpipViewer-up">'),
+          downButton    = $('<a class="jpipViewer-button jpipViewer-down">'),
+          leftButton    = $('<a class="jpipViewer-button jpipViewer-left">'),
+          rightButton   = $('<a class="jpipViewer-button jpipViewer-right">'),
+          zoomInButton  = $('<a class="jpipViewer-button jpipViewer-zoomIn">'),
+          zoomOutButton = $('<a class="jpipViewer-button jpipViewer-zoomOut">'),
+          resetButton   = $('<a class="jpipViewer-button jpipViewer-reset">');
+
+      var directionControls = $('<div class="jpipViewer-directionControls" />')
+      directionControls.append(upButton, downButton, leftButton, rightButton);
+
+      var zoomControls = $('<div class="jpipViewer-zoomControls"/>')
+      zoomControls.append(zoomInButton, zoomOutButton);
+
+      navigationUI.append(directionControls, zoomControls, resetButton);
       navDiv.append(navigationUI);
 
       $(options.element).append(container);
 
       // Attach event handlers to make the UI functional
-      $('.jpipViewer-up').click(up);
-      $('.jpipViewer-down').click(down);
-      $('.jpipViewer-left').click(left);
-      $('.jpipViewer-right').click(right);
-      $('.jpipViewer-zoomIn').click(zoomIn);
-      $('.jpipViewer-zoomOut').click(zoomOut);
-      $('.jpipViewer-reset').click(reset);
+      upButton.on('click', up);
+      downButton.on('click', down);
+      leftButton.on('click', left);
+      rightButton.on('click', right);
+      zoomInButton.on('click', zoomIn);
+      zoomOutButton.on('click', zoomOut);
+      resetButton.on('click', reset);
 
       $('.jpipViewer-viewport').draggable({
         containment: $("#navigationImage"),
@@ -202,6 +211,7 @@
     }
 
     function getImage() {
+
       var src = options.server + '?url_ver=Z39.88-2004&rft_id=' + encode(options.image) + '&svc_id='
                 + options.svcId + '&svc_val_fmt=' + options.svcValFmt
                 + '&svc.format=image/png&svc.level=' + options.level + '&svc.rotate=0&svc.region='
@@ -209,14 +219,10 @@
                 + Math.round(options.viewportPosition[1] * 16) + ',' + options.height + ','
                 + options.width;
 
-      var mainImage = $('#mainImage');
-      if (mainImage.length == 0) {
-        mainImage = $('<img id="mainImage">');
-      }
+      imageView = imageView || $('<img class="jpipViewer-imageView">');
+      imageView.attr('src', src);
 
-      mainImage.attr('src', src);
-
-      $(options.element).append(mainImage);
+      $(options.element).append(imageView);
     }
 
     function zoom(e) {

@@ -12,20 +12,15 @@
 
 @import "../bower_components/Jcrop/css/jquery.Jcrop.min.css";
 
+/* Primary container */
 .jpipContainer {
   position: absolute;
-  left: 80%;
+  right: 10px;
   top: 10px;
   z-index: 2;
 }
 
-.jpipViewer-toolbar {
-  height: 15px;
-  background: #26596A;
-  cursor: move;
-}
-
-#mainImage {
+.jpipViewer-imageView {
   position: absolute;
   top: 0px;
   left: 0px;
@@ -44,51 +39,76 @@
   cursor:default;
   line-height: 0px;
   position: relative;
-  background: #4DAAAB;
-  opacity: 0.7;
+  background: rgba(77, 170, 171, 0.7);
   width: auto;
   padding: 10px;
 }
 
-.jpipViewer-left, .jpipViewer-right {
-  margin-top: 40px;
-  margin-left: -10px;
-  margin-right: -10px;
+.jpipViewer-directionControls {
+  display: inline-block;
+  position: relative;
+  height: 90px;
+  width: 90px;
 }
 
-.jpipViewer-navUI .jpipViewer-down {
-  margin-left: 12px;
-  margin-top: -8px;
+.jpipViewer-zoomControls {
+  display: inline-block;
+  position: relative;
+  height: 90px;
+  width: 40px;
+}
+
+.jpipViewer-directionControls .jpipViewer-up {
+  top: 5px;
+  left: 25px;
+}
+.jpipViewer-directionControls .jpipViewer-down {
+  top: 46px;
+  left: 25px;
+}
+.jpipViewer-directionControls .jpipViewer-left {
+  top: 25px;
+  left: 6px;
+}
+.jpipViewer-directionControls .jpipViewer-right {
+  top: 25px;
+  left: 45px;
+}
+
+.jpipViewer-zoomControls .jpipViewer-zoomIn {
+  top: 5px;
+  left: 0px;
+}
+.jpipViewer-zoomControls .jpipViewer-zoomOut {
+  bottom: 10px;
+  left: 0px;
+}
+
+.jpipViewer-zoomControls {
+  display: inline-block;
+}
+
+.jpipViewer-reset {
+  top: 30px;
+  right: 20px;
+}
+
+.jpipViewer-button {
+  width: 36px;
+  height: 36px;
+  position: absolute;
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
 .jpipViewer-left, .jpipViewer-right, .jpipViewer-up, .jpipViewer-down, .jpipViewer-zoomIn, .jpipViewer-zoomOut, .jpipViewer-reset {
   display: inline-block;
 }
 
-.jpipViewer-left, .jpipViewer-right {
-  width: 32px;
-  height: 25px;
-}
-
-.jpipViewer-up, .jpipViewer-down {
-  width: 25px;
-  height: 32px;
-}
-
-.jpipViewer-zoomIn, .jpipViewer-zoomOut {
-  width: 30px;
-  height: 30px;
-}
-
-.jpipViewer-reset {
-  width: 36px;
-  height: 33px;
-}
-
-.jpipViewer-left    { background: url('../img/left.png'); }
-.jpipViewer-right   { background: url('../img/right.png'); }
-.jpipViewer-up      { background: url('../img/up.png'); }
-.jpipViewer-down    { background: url('../img/down.png'); }
-.jpipViewer-zoomIn  { background: url('../img/zoomIn.png'); }
-.jpipViewer-zoomOut { background: url('../img/zoomOut.png'); }
-.jpipViewer-reset   { background: url('../img/reset.png'); }
+.jpipViewer-left    { background-image: url('../img/left.png'); }
+.jpipViewer-right   { background-image: url('../img/right.png'); }
+.jpipViewer-up      { background-image: url('../img/up.png'); }
+.jpipViewer-down    { background-image: url('../img/down.png'); }
+.jpipViewer-zoomIn  { background-image: url('../img/zoomIn.png'); }
+.jpipViewer-zoomOut { background-image: url('../img/zoomOut.png'); }
+.jpipViewer-reset   { background-image: url('../img/reset.png'); }

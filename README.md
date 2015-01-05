@@ -31,11 +31,9 @@ If you're using a dependency injection tool like [wiredep](https://github.com/ta
 
 It's easy! Just call `$(element).jpipViewer(imageUrl, options)`.
 
-```html
-<script>
-  // Call once DOM is loaded
-  $('#jpipViewer').jpipViewer('http://memory.loc.gov/gmd/gmd433/g4330/g4330/np000066.jp2', { /* additional options */ });
-</script>
+```js
+// Call once DOM is loaded
+$('#jpipViewer').jpipViewer('http://memory.loc.gov/gmd/gmd433/g4330/g4330/np000066.jp2', { /* additional options */ });
 ```
 
 ### Options
