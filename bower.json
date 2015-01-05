@@ -6,7 +6,17 @@
     "Steven Petryk <steven.petryk@agilesrc.com>"
   ],
   "description": "A JPIP image viewer",
-  "main": ["dist/jquery.jpip.js", "dist/jquery.jpip.css"],
+  "main": [
+    "dist/jquery.jpip.js",
+    "dist/jquery.jpip.css",
+    "img/up.png",
+    "img/down.png",
+    "img/left.png",
+    "img/right.png",
+    "img/zoomIn.png",
+    "img/zoomOut.png",
+    "img/reset.png",
+  ],
   "keywords": [
     "jpip",
     "image"

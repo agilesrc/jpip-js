@@ -1,4 +1,4 @@
-@import "bower_components/Jcrop/css/jquery.Jcrop.min.css";
+@import "../bower_components/Jcrop/css/jquery.Jcrop.min.css";
 
 #img_gallery {
   min-height: 50px;
@@ -72,7 +72,7 @@ div#navUI #down {
   margin-top: -8px;
 }
 
-#left, #right, #up, #down, #zoomIn, #zoomOut {
+#left, #right, #up, #down, #zoomIn, #zoomOut, #reset {
   display: inline-block;
 }
 
@@ -91,9 +91,15 @@ div#navUI #down {
   height: 30px;
 }
 
-#left    { background: url('img/left.png'); }
-#right   { background: url('img/right.png'); }
-#up      { background: url('img/up.png'); }
-#down    { background: url('img/down.png'); }
-#zoomIn  { background: url('img/zoomIn.png'); }
-#zoomOut { background: url('img/zoomOut.png'); }
+#reset {
+  width: 36px;
+  height: 33px;
+}
+
+#left    { background: url('../img/left.png'); }
+#right   { background: url('../img/right.png'); }
+#up      { background: url('../img/up.png'); }
+#down    { background: url('../img/down.png'); }
+#zoomIn  { background: url('../img/zoomIn.png'); }
+#zoomOut { background: url('../img/zoomOut.png'); }
+#reset   { background: url('../img/reset.png'); }
