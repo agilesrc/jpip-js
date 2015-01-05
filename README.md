@@ -1,8 +1,8 @@
 # jpip.js
 
-A lightweight JPIP image viewer jQuery plugin
+A lightweight jQuery plugin for viewing JPIP images.
 
-*Copyright 2001-2014 AgileSrc LLC*
+*© 2001-2014 AgileSrc LLC.*
 
 ## Introduction
 Welcome to AgileSrc's lightweight JPIP viewer. We assume that you have a basic understanding of the JPEG2000 streaming protocol (JPIP). The goal when designing this script was to have a lightweight yet user-friendly user interface for viewing JPIP images on a variety of devices. To ensure this goal was met, we have utilized both the core jQuery library as well as the jQuery UI library.
@@ -16,30 +16,14 @@ If you have any questions, please feel free to contact us at [support@agilesrc.c
 bower install jpip --save
 ```
 
-## Usage
-```
-Requirements:
-  |
-  - css
-  | |
-  | - agile.css - the CSS for the jpipViewer class
-  |
-  - img
-  | |
-  | - down.png    - the PNG for the down icon
-  | - left.png    - the PNG for the left icon
-  | - reset.png   - the PNG to reset the view
-  | - right.png   - the PNG for the right icon
-  | - up.png      - the PNG for the up icon
-  | - zoomIn.png  - the PNG to zoom in
-  | - zoomOut.png - the PNG to zoom out
-  |
-  - js
-  | |
-  | jpip.js - the reason you're reading this
+If you're using a tool like [wiredep](https://github.com/taptapship/wiredep.git), that's all you'll need to do. However, if you're manually including assets in your HTML, you'll need these two files:
+
+```html
+<script src="bower_components/jpip/dist/jquery.jpip.js"></script>
+<link rel="stylesheet" href="bower_components/jpip/dist/jquery.jpip.css" />
 ```
 
-Example:
+## Usage
 
 ```html
 <script>
