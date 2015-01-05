@@ -2,7 +2,7 @@
 
 A lightweight jQuery plugin for viewing JPIP images.
 
-*© 2001-2014 AgileSrc LLC.*
+*© 2001-2015 AgileSrc LLC.*
 
 ## Introduction
 This plugin assumes that you have a basic understanding of the JPEG2000 streaming protocol (JPIP). The goal when designing jpip.js was to have a lightweight yet user-friendly user interface for viewing JPIP images on a variety of devices. This plugin requires an [adore-djatoka JPIP server](http://sourceforge.net/apps/mediawiki/djatoka/index.php?title=Main_Page) to be available for use.
