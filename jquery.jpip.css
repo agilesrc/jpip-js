@@ -1,0 +1,99 @@
+@import "bower_components/Jcrop/css/jquery.Jcrop.min.css";
+
+#img_gallery {
+  min-height: 50px;
+  height: 50px;
+}
+
+#large_img {
+  font-family: "MS Sans Serif", Geneva, sans-serif;
+  margin: 0;
+  left: 0;
+  top: 0;
+  overflow:hidden;
+  padding: 0;
+  margin-left: auto;
+  margin-right: auto;
+  position: absolute;
+  width: 99%;
+  height: 90%;
+}
+
+#footer {
+  margin-left: 5px;
+}
+
+div#jpipContainer {
+  position: absolute;
+  left: 80%;
+  top: 10px;
+  z-index: 2;
+}
+
+div#toolbar {
+  height: 15px;
+  background: #26596A;
+  cursor: move;
+}
+
+#mainImage {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: -1;
+}
+
+div#jpipNavigation, div#viewport {
+  position: absolute;
+  margin: 0px;
+  border: 2px solid #5ADED4;
+  cursor: move;
+  z-index: 3;
+}
+
+div#navUI {
+  cursor:default;
+  line-height: 0px;
+  position: relative;
+  background: #4DAAAB;
+  opacity: 0.7;
+  width: auto;
+  padding: 10px;
+}
+
+div#navUI #left, div#navUI #right {
+  margin-top: 40px;
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+div#navUI #down {
+  margin-left: 12px;
+  margin-top: -8px;
+}
+
+#left, #right, #up, #down, #zoomIn, #zoomOut {
+  display: inline-block;
+}
+
+#left, #right {
+  width: 32px;
+  height: 25px;
+}
+
+#up, #down {
+  width: 25px;
+  height: 32px;
+}
+
+#zoomIn, #zoomOut {
+  width: 30px;
+  height: 30px;
+}
+
+#left    { background: url('img/left.png'); }
+#right   { background: url('img/right.png'); }
+#up      { background: url('img/up.png'); }
+#down    { background: url('img/down.png'); }
+#zoomIn  { background: url('img/zoomIn.png'); }
+#zoomOut { background: url('img/zoomOut.png'); }

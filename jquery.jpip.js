@@ -197,7 +197,7 @@
       // Set up the UI for navigation
       var navigationUI = document.createElement("div");
       navigationUI.id = 'navUI';
-      navigationUI.innerHTML = '<img id="left" src="img/left.png"/><img id="up" src="img/up.png"/><img id="right" src="img/right.png"/><br/><img id="down" src="img/down.png"/><br/><img id="zoomIn" src="img/zoomIn.png"/><img id="zoomOut" src="img/zoomOut.png"/><img id="reset" src="img/reset.png"/>';
+      navigationUI.innerHTML = '<a id="left" /><a id="up" /><a id="right" /><br/><a id="down" /><br/><a id="zoomIn" /><a id="zoomOut" /><a id="reset" />';
 
       div.appendChild(navigationUI);
 
