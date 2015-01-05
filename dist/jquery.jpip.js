@@ -148,18 +148,18 @@
       container.css({width: options.minX, height: 20});
 
       // Set up a div to slide toggle the UI
-      var toolbar = $('<div id="toolbar">');
+      var toolbar = $('<div class="jpipViewer-toolbar">');
       toolbar.css({width: options.minX});
       toolbar.on('dblclick', $('navUI').slideToggle);
       container.append(toolbar);
 
       // Set up the main navigation div
-      var navDiv = $('<div id="jpipNavigation">');
+      var navDiv = $('<div class="jpipNavigation">');
       navDiv.css({width: options.minX, height: options.minY});
       container.append(navDiv);
 
       // Get our thumbnail image
-      var image = $('<img id="navigationImage">')
+      var image = $('<img class="jpipViewer-navigationImage">')
       image.attr('src', options.server + '?url_ver=Z39.88-2004&rft_id=' + encode(options.image)
         + '&svc_id=' + options.svcId + '&svc_val_fmt=' + options.svcValFmt
         + '&svc.format=image/jpeg&svc.scale=' + options.minX + ',' + options.minY);
@@ -167,32 +167,32 @@
       navDiv.append(image);
 
       // Div so we can see where we are when we are zoomed in
-      var viewport = $('<div id="viewport">');
+      var viewport = $('<div class="jpipViewer-viewport">');
       viewport.css({width: Math.floor(options.minX / 2), height: Math.floor(options.minY / 2)});
 
       navDiv.append(viewport);
 
       // Set up the UI for navigation
-      var navigationUI = $('<div id="navUI">');
-      navigationUI.html('<a id="left" /><a id="up" /><a id="right" /><br/><a id="down" /><br/><a id="zoomIn" /><a id="zoomOut" /><a id="reset" />');
+      var navigationUI = $('<div class="jpipViewer-navUI">');
+      navigationUI.html('<a class="jpipViewer-left" /><a class="jpipViewer-up" /><a class="jpipViewer-right" /><br/><a class="jpipViewer-down" /><br/><a class="jpipViewer-zoomIn" /><a class="jpipViewer-zoomOut" /><a class="jpipViewer-reset" />');
 
       navDiv.append(navigationUI);
 
       $(options.element).append(container);
 
       // Attach event handlers to make the UI functional
-      $('#up').click(up);
-      $('#down').click(down);
-      $('#left').click(left);
-      $('#right').click(right);
-      $('#zoomIn').click(zoomIn);
-      $('#zoomOut').click(zoomOut);
-      $('#reset').click(reset);
+      $('.jpipViewer-up').click(up);
+      $('.jpipViewer-down').click(down);
+      $('.jpipViewer-left').click(left);
+      $('.jpipViewer-right').click(right);
+      $('.jpipViewer-zoomIn').click(zoomIn);
+      $('.jpipViewer-zoomOut').click(zoomOut);
+      $('.jpipViewer-reset').click(reset);
 
-      $('#viewport').draggable({
+      $('.jpipViewer-viewport').draggable({
         containment: $("#navigationImage"),
         start: function() {
-          var offset = $('#viewport').offset();
+          var offset = $('.jpipViewer-viewport').offset();
           options.viewportPosition = [offset.left, offset.top];
         },
         stop: function(event, ui) {
@@ -483,11 +483,11 @@
       options.viewportPosition[0] = top;
       options.viewportPosition[1] = left;
 
-      var viewport = document.getElementById('viewport');
+      var viewport = $('.jpipViewer-viewport')[0];
 
       var border = viewport.offsetHeight - viewport.clientHeight;
 
-      $('#viewport').animate({
+      $('.jpipViewer-viewport').animate({
         left: left,
         top: top,
         width: width - border / 2,

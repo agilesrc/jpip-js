@@ -12,37 +12,14 @@
 
 @import "../bower_components/Jcrop/css/jquery.Jcrop.min.css";
 
-#img_gallery {
-  min-height: 50px;
-  height: 50px;
-}
-
-#large_img {
-  font-family: "MS Sans Serif", Geneva, sans-serif;
-  margin: 0;
-  left: 0;
-  top: 0;
-  overflow:hidden;
-  padding: 0;
-  margin-left: auto;
-  margin-right: auto;
-  position: absolute;
-  width: 99%;
-  height: 90%;
-}
-
-#footer {
-  margin-left: 5px;
-}
-
-div.jpipContainer {
+.jpipContainer {
   position: absolute;
   left: 80%;
   top: 10px;
   z-index: 2;
 }
 
-div#toolbar {
+.jpipViewer-toolbar {
   height: 15px;
   background: #26596A;
   cursor: move;
@@ -55,7 +32,7 @@ div#toolbar {
   z-index: -1;
 }
 
-div#jpipNavigation, div#viewport {
+.jpipNavigation, .jpipViewer-viewport {
   position: absolute;
   margin: 0px;
   border: 2px solid #5ADED4;
@@ -63,7 +40,7 @@ div#jpipNavigation, div#viewport {
   z-index: 3;
 }
 
-div#navUI {
+.jpipViewer-navUI {
   cursor:default;
   line-height: 0px;
   position: relative;
@@ -73,45 +50,45 @@ div#navUI {
   padding: 10px;
 }
 
-div#navUI #left, div#navUI #right {
+.jpipViewer-left, .jpipViewer-right {
   margin-top: 40px;
   margin-left: -10px;
   margin-right: -10px;
 }
 
-div#navUI #down {
+.jpipViewer-navUI .jpipViewer-down {
   margin-left: 12px;
   margin-top: -8px;
 }
 
-#left, #right, #up, #down, #zoomIn, #zoomOut, #reset {
+.jpipViewer-left, .jpipViewer-right, .jpipViewer-up, .jpipViewer-down, .jpipViewer-zoomIn, .jpipViewer-zoomOut, .jpipViewer-reset {
   display: inline-block;
 }
 
-#left, #right {
+.jpipViewer-left, .jpipViewer-right {
   width: 32px;
   height: 25px;
 }
 
-#up, #down {
+.jpipViewer-up, .jpipViewer-down {
   width: 25px;
   height: 32px;
 }
 
-#zoomIn, #zoomOut {
+.jpipViewer-zoomIn, .jpipViewer-zoomOut {
   width: 30px;
   height: 30px;
 }
 
-#reset {
+.jpipViewer-reset {
   width: 36px;
   height: 33px;
 }
 
-#left    { background: url('../img/left.png'); }
-#right   { background: url('../img/right.png'); }
-#up      { background: url('../img/up.png'); }
-#down    { background: url('../img/down.png'); }
-#zoomIn  { background: url('../img/zoomIn.png'); }
-#zoomOut { background: url('../img/zoomOut.png'); }
-#reset   { background: url('../img/reset.png'); }
+.jpipViewer-left    { background: url('../img/left.png'); }
+.jpipViewer-right   { background: url('../img/right.png'); }
+.jpipViewer-up      { background: url('../img/up.png'); }
+.jpipViewer-down    { background: url('../img/down.png'); }
+.jpipViewer-zoomIn  { background: url('../img/zoomIn.png'); }
+.jpipViewer-zoomOut { background: url('../img/zoomOut.png'); }
+.jpipViewer-reset   { background: url('../img/reset.png'); }
