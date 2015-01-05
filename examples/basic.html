@@ -28,11 +28,12 @@
   <script src="js/main.js"></script>
   <script src="js/EasyPinnedFooter.js"></script>
   <script>
-    var jpip = new jpipViewer({
-      divId: 'large_img',
-      image: "http://memory.loc.gov/gmd/gmd433/g4330/g4330/np000066.jp2",
-      server: "http://dl-img.home.nyu.edu/adore-djatoka/resolver"
-    });
+    $('#large_img').jpipViewer(
+      "http://memory.loc.gov/gmd/gmd433/g4330/g4330/np000066.jp2",
+      {
+        server: "http://dl-img.home.nyu.edu/adore-djatoka/resolver"
+      }
+    );
   </script>
 </body>
 </html>

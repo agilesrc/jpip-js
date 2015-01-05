@@ -6,14 +6,20 @@
  * distributed is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  */
-(function (exports, $) {
+(function ($) {
   var jpip;
 
-  exports.jpipViewer = function(options) {
+  $.fn.jpipViewer = function(image, options) {
+    return this.each(function() {
+      new jpipViewer(this, $.extend(options, {image: image}))
+    });
+  }
+
+  var jpipViewer = function(element, options) {
     /*
      * Initialize the member variables
      */
-    this.divId = options['divId'] || 'jpipViewer';
+    this.element = element || $('#jpipViewer');
     this.server = options['server'] || 'http://localhost:8080/adore-djatoka/resolver';
     this.image = options['image'] || alert('Image location must be set!');
     this.scale = options['scale'] || null;
@@ -42,24 +48,19 @@
 
   	jpip = this;
 
-    /*
-     * load() should be called once the DOM is loaded
-     */
-    this.load = function() {
-      var url = this.server + '?url_ver=Z39.88-2004&rft_id=' + this.image + '&svc_id=info:lanl-repo/svc/getMetadata';
-      xmlHttp = new XMLHttpRequest();
-      xmlHttp.onreadystatechange = setup;
-      xmlHttp.open("GET", url, true);
-      xmlHttp.send(null);
-    }
+    var url = this.server + '?url_ver=Z39.88-2004&rft_id=' + this.image + '&svc_id=info:lanl-repo/svc/getMetadata';
+    xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = setup;
+    xmlHttp.open("GET", url, true);
+    xmlHttp.send(null);
 
     function setup() {
       // Only process once we're ready
       if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
         var jsonData = $.parseJSON(xmlHttp.response);
-        var div = '#' + jpip.divId;
-        var divWidth = $(div).width();
-        var divHeight = $(div).height();
+
+        var divWidth = $(jpip.element).width();
+        var divHeight = $(jpip.element).height();
 
         jpip.maxWidth = Math.round(parseInt(jsonData.width));
         jpip.maxHeight = Math.round(parseInt(jsonData.height));
@@ -72,9 +73,7 @@
         var target = document.createElement("div");
         target.id = 'target';
 
-        var div = document.getElementById(jpip.divId);
-
-        div.appendChild(target);
+        jpip.element.appendChild(target);
 
         $('#target').dblclick(function() {
           zoom();
@@ -202,7 +201,7 @@
 
       div.appendChild(navigationUI);
 
-      var t = document.getElementById(jpip.divId);
+      var t = jpip.element;
 
       t.appendChild(container);
 
@@ -255,7 +254,7 @@
 
       mainImage.src = src;
 
-      var div = document.getElementById(jpip.divId);
+      var div = jpip.element;
       div.appendChild(mainImage);
     }
 
@@ -545,4 +544,4 @@
       }
     }
   }
-})(window, jQuery);
+})(jQuery);
