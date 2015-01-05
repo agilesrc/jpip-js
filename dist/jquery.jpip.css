@@ -39,7 +39,7 @@
   cursor:default;
   line-height: 0px;
   position: relative;
-  background: rgba(77, 170, 171, 0.7);
+  background: rgba(77, 170, 171, 0.85);
   width: auto;
   padding: 10px;
 }
@@ -84,10 +84,6 @@
   left: 0px;
 }
 
-.jpipViewer-zoomControls {
-  display: inline-block;
-}
-
 .jpipViewer-reset {
   top: 30px;
   right: 20px;
@@ -99,6 +95,7 @@
   position: absolute;
   background-repeat: no-repeat;
   background-position: center center;
+  cursor: pointer;
 }
 
 .jpipViewer-left, .jpipViewer-right, .jpipViewer-up, .jpipViewer-down, .jpipViewer-zoomIn, .jpipViewer-zoomOut, .jpipViewer-reset {

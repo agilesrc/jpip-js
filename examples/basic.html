@@ -12,7 +12,7 @@
   <script src="../dist/jquery.jpip.js"></script>
   <script>
     $(function() {
-      $('#large_img').jpipViewer(
+      $('#jpip_viewer').jpipViewer(
         "http://memory.loc.gov/gmd/gmd433/g4330/g4330/np000066.jp2",
         {
           server: "http://dl-img.home.nyu.edu/adore-djatoka/resolver"
@@ -32,32 +32,34 @@
       margin: 0px;
     }
 
-    #large_img {
+    #jpip_viewer {
       font-family: "MS Sans Serif", Geneva, sans-serif;
       margin: 0;
       left: 0;
+      right: 0px;
       top: 0;
+      bottom: 0px;
       overflow:hidden;
       padding: 0;
       margin-left: auto;
       margin-right: auto;
       position: absolute;
-      width: 99%;
-      height: 90%;
     }
 
     #footer {
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
       position: fixed;
       bottom: 0px;
       right: 0px;
       left: 0px;
-      text-align: center;
       padding: 10px;
+      font-size: 0.7em;
     }
   </style>
 </head>
 <body>
-  <div id="large_img">
+  <div id="jpip_viewer">
   </div>
 
   <div id="footer">
