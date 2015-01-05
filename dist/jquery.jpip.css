@@ -35,7 +35,7 @@
   margin-left: 5px;
 }
 
-div#jpipContainer {
+div.jpipContainer {
   position: absolute;
   left: 80%;
   top: 10px;

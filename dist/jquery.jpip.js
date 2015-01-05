@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2001-2012 AgileSrc LLC
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -9,111 +9,97 @@
  * Public License, a copy of which can be found in LICENSE.txt at the root of the project directory,
  * or at http://www.gnu.org/licenses/gpl.txt.
  */
-(function ($) {
-  var jpip;
 
+(function ($) {
   $.fn.jpipViewer = function(image, options) {
     return this.each(function() {
-      new jpipViewer(this, $.extend(options, {image: image}))
+      new JPIPViewer(this, $.extend({}, options, {image: image}))
     });
   }
 
-  var jpipViewer = function(element, options) {
-    /*
-     * Initialize the member variables
-     */
-    this.element = element || $('#jpipViewer');
-    this.server = options['server'] || 'http://localhost:8080/adore-djatoka/resolver';
-    this.image = options['image'] || alert('Image location must be set!');
-    this.scale = options['scale'] || null;
-    this.initialZoom = options['zoom'] || 1;
-    this.showNavButtons = options['showNavButtons'] || true;
-    this.maxWidth = 0;
-    this.maxHeight = 0;
-    this.minX = 0;
-    this.minY = 0;
-    this.width = 0;
-    this.height = 0;
-    this.maxZoom = this.initialZoom;
-    this.topLeftX = 0;
-    this.topLeftY = 0;
-    this.numLevels = 0;
-    this.level = 0;
-    this.regionWidth = 0;
-    this.regionHeight = 0;
-    this.regionX = 0;
-    this.regionY = 0;
-    this.xFit = 0;
-    this.yFit = 0;
-    this.viewportPosition = [0,0];
-    this.svcValFmt = 'info:ofi/fmt:kev:mtx:jpeg2000';
-    this.svcId = 'info:lanl-repo/svc/getRegion';
+  function JPIPViewer(element, options) {
+    options = $.extend({
+      element: element || $('#jpipViewer'),
+      server: 'http://localhost:8080/adore-djatoka/resolver',
+      scale: null,
+      initialZoom: 1,
+      showNavButtons: true,
+      maxWidth: 0,
+      maxHeight: 0,
+      minX: 0,
+      minY: 0,
+      width: 0,
+      height: 0,
+      maxZoom: this.initialZoom,
+      topLeftX: 0,
+      topLeftY: 0,
+      numLevels: 0,
+      level: 0,
+      regionWidth: 0,
+      regionHeight: 0,
+      regionX: 0,
+      regionY: 0,
+      xFit: 0,
+      yFit: 0,
+      viewportPosition: [0,0],
+      svcValFmt: 'info:ofi/fmt:kev:mtx:jpeg2000',
+      svcId: 'info:lanl-repo/svc/getRegion'
+    }, options);
 
-  	jpip = this;
+    var url = options.server + '?url_ver=Z39.88-2004&rft_id=' + options.image + '&svc_id=info:lanl-repo/svc/getMetadata';
+    $.getJSON(url, setup);
 
-    var url = this.server + '?url_ver=Z39.88-2004&rft_id=' + this.image + '&svc_id=info:lanl-repo/svc/getMetadata';
-    xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = setup;
-    xmlHttp.open("GET", url, true);
-    xmlHttp.send(null);
+    function setup(data) {
+      var divWidth = $(options.element).width();
+      var divHeight = $(options.element).height();
 
-    function setup() {
-      // Only process once we're ready
-      if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-        var jsonData = $.parseJSON(xmlHttp.response);
+      options.maxWidth = Math.round(parseInt(data.width));
+      options.maxHeight = Math.round(parseInt(data.height));
+      options.numLevels = parseInt(data.levels);
+      options.level = options.numLevels;
 
-        var divWidth = $(jpip.element).width();
-        var divHeight = $(jpip.element).height();
+      calculateMins(divWidth, divHeight);
+      createNavigationWindow();
 
-        jpip.maxWidth = Math.round(parseInt(jsonData.width));
-        jpip.maxHeight = Math.round(parseInt(jsonData.height));
-        jpip.numLevels = parseInt(jsonData.levels);
-        jpip.level = jpip.numLevels;
+      var target = document.createElement("div");
+      target.id = 'target';
 
-        calculateMins(divWidth, divHeight);
-        createNavigationWindow();
+      options.element.appendChild(target);
 
-        var target = document.createElement("div");
-        target.id = 'target';
+      $('#target').dblclick(function() {
+        zoom();
+      })
 
-        jpip.element.appendChild(target);
+      options.regionWidth = divWidth;
+      options.regionHeight = divHeight;
 
-        $('#target').dblclick(function() {
-          zoom();
-        })
+      recenter();
 
-        jpip.regionWidth = divWidth;
-        jpip.regionHeight = divHeight;
+      $(window).resize(function() {
+        window.location = window.location;
+      });
 
-        recenter();
-
-        $(window).resize(function() {
-          window.location = window.location;
-        });
-
-        if(jpip.scale) {
-          var scale = document.createElement("div");
-          scale.id = 'scale';
-          jpip.source.appendChild(scale);
-        }
-
-        for(var i = 0; i < jpip.initialZoom; i++) {
-          zoomIn();
-        }
-
-        zoomOut();
-        getImage();
-        positionViewport();
-
+      if(options.scale) {
+        var scale = document.createElement("div");
+        scale.id = 'scale';
+        options.source.appendChild(scale);
       }
+
+      for(var i = 0; i < options.initialZoom; i++) {
+        zoomIn();
+      }
+
+      zoomOut();
+      getImage();
+      positionViewport();
     }
 
     /*
      * Calculate the minimum image sizes based on the div size
      */
     function calculateMins(divWidth, divHeight) {
-      var x = jpip.maxWidth;
-      var y = jpip.maxHeight;
+      var x = options.maxWidth;
+      var y = options.maxHeight;
       var thumbnailSize = 100;
 
       if (divWidth > divHeight) {
@@ -128,7 +114,7 @@
         thumbnailSize = divWidth / 4;
       }
 
-      var level = jpip.level;
+      var level = options.level;
       while (x > thumbnailSize) {
         x = x / 2;
         y = y / 2;
@@ -137,19 +123,19 @@
         }
       }
 
-      jpip.minX = Math.round(x);
-      jpip.minY = Math.round(y);
+      options.minX = Math.round(x);
+      options.minY = Math.round(y);
 
-      x = jpip.maxWidth;
-      y = jpip.maxHeight;
+      x = options.maxWidth;
+      y = options.maxHeight;
       while (x > divWidth && y > divHeight) {
         x = x / 2;
         y = y / 2;
-        jpip.level--;
+        options.level--;
       }
-      jpip.width = Math.round(x);
-      jpip.height = Math.round(y);
-      jpip.level--;
+      options.width = Math.round(x);
+      options.height = Math.round(y);
+      options.level--;
 
     }
 
@@ -157,86 +143,57 @@
      * This will create the necessary components for the navigation div
      */
     function createNavigationWindow() {
-
       // Set up the container for our navigation window
-      var container = document.createElement("div");
-      container.id = 'jpipContainer';
-      container.style.width = jpip.minX;
-      container.style.height = 20;
-
+      var container = $('<div class="jpipContainer">');
+      container.css({width: options.minX, height: 20});
 
       // Set up a div to slide toggle the UI
-      var toolbar = document.createElement("div");
-      toolbar.id = 'toolbar';
-      toolbar.style.width = jpip.minX;
-      toolbar.addEventListener('ondblclick', $('navUI').slideToggle());
-
-      container.appendChild(toolbar);
+      var toolbar = $('<div id="toolbar">');
+      toolbar.css({width: options.minX});
+      toolbar.on('dblclick', $('navUI').slideToggle);
+      container.append(toolbar);
 
       // Set up the main navigation div
-      var div = document.createElement("div");
-      div.id = 'jpipNavigation';
-      div.style.width = jpip.minX;
-      div.style.height = jpip.minY;
-
-      container.appendChild(div);
+      var navDiv = $('<div id="jpipNavigation">');
+      navDiv.css({width: options.minX, height: options.minY});
+      container.append(navDiv);
 
       // Get our thumbnail image
-      var image = document.createElement("img");
-      image.id = 'navigationImage';
-      image.src = jpip.server + '?url_ver=Z39.88-2004&rft_id=' + encode(jpip.image) + '&svc_id=' + jpip.svcId
-             + '&svc_val_fmt=' + jpip.svcValFmt + '&svc.format=image/jpeg&svc.scale=' + jpip.minX + ',' + jpip.minY;
+      var image = $('<img id="navigationImage">')
+      image.attr('src', options.server + '?url_ver=Z39.88-2004&rft_id=' + encode(options.image)
+        + '&svc_id=' + options.svcId + '&svc_val_fmt=' + options.svcValFmt
+        + '&svc.format=image/jpeg&svc.scale=' + options.minX + ',' + options.minY);
 
-      div.appendChild(image);
+      navDiv.append(image);
 
       // Div so we can see where we are when we are zoomed in
-      var viewport = document.createElement("div");
-      viewport.id = 'viewport';
-      viewport.style.width = Math.floor(jpip.minX / 2);
-      viewport.style.height = Math.floor(jpip.minY / 2);
+      var viewport = $('<div id="viewport">');
+      viewport.css({width: Math.floor(options.minX / 2), height: Math.floor(options.minY / 2)});
 
-      div.appendChild(viewport);
+      navDiv.append(viewport);
 
       // Set up the UI for navigation
-      var navigationUI = document.createElement("div");
-      navigationUI.id = 'navUI';
-      navigationUI.innerHTML = '<a id="left" /><a id="up" /><a id="right" /><br/><a id="down" /><br/><a id="zoomIn" /><a id="zoomOut" /><a id="reset" />';
+      var navigationUI = $('<div id="navUI">');
+      navigationUI.html('<a id="left" /><a id="up" /><a id="right" /><br/><a id="down" /><br/><a id="zoomIn" /><a id="zoomOut" /><a id="reset" />');
 
-      div.appendChild(navigationUI);
+      navDiv.append(navigationUI);
 
-      var t = jpip.element;
-
-      t.appendChild(container);
+      $(options.element).append(container);
 
       // Attach event handlers to make the UI functional
-      $('#zoomIn').click(function() {
-        zoomIn()
-      });
-      $('#zoomOut').click(function() {
-        zoomOut()
-      });
-      $('#left').click(function() {
-        left()
-      });
-      $('#up').click(function() {
-        up()
-      });
-      $('#right').click(function() {
-        right()
-      });
-      $('#down').click(function() {
-        down()
-      });
-      $('#reset').click(function() {
-        reset()
-      });
+      $('#up').click(up);
+      $('#down').click(down);
+      $('#left').click(left);
+      $('#right').click(right);
+      $('#zoomIn').click(zoomIn);
+      $('#zoomOut').click(zoomOut);
+      $('#reset').click(reset);
 
-      //Set up our draggable viewport **NOTE: Requires jQuery UI
       $('#viewport').draggable({
         containment: $("#navigationImage"),
         start: function() {
           var offset = $('#viewport').offset();
-          jpip.viewportPosition = [offset.left, offset.top];
+          options.viewportPosition = [offset.left, offset.top];
         },
         stop: function(event, ui) {
           scrollNavigation(ui);
@@ -245,20 +202,21 @@
     }
 
     function getImage() {
-      var src = jpip.server + '?url_ver=Z39.88-2004&rft_id=' + encode(jpip.image) + '&svc_id=' + jpip.svcId
-                + '&svc_val_fmt=' + jpip.svcValFmt + '&svc.format=image/png&svc.level=' + jpip.level
-                + '&svc.rotate=0&svc.region=' + Math.round(jpip.viewportPosition[0] * 16) + ',' + Math.round(jpip.viewportPosition[1] * 16) + ',' + jpip.height + ',' + jpip.width;
+      var src = options.server + '?url_ver=Z39.88-2004&rft_id=' + encode(options.image) + '&svc_id='
+                + options.svcId + '&svc_val_fmt=' + options.svcValFmt
+                + '&svc.format=image/png&svc.level=' + options.level + '&svc.rotate=0&svc.region='
+                + Math.round(options.viewportPosition[0] * 16) + ','
+                + Math.round(options.viewportPosition[1] * 16) + ',' + options.height + ','
+                + options.width;
 
-      var mainImage = document.getElementById('mainImage');
-      if (mainImage == null) {
-        mainImage = document.createElement("img");
-        mainImage.id = 'mainImage';
+      var mainImage = $('#mainImage');
+      if (mainImage.length == 0) {
+        mainImage = $('<img id="mainImage">');
       }
 
-      mainImage.src = src;
+      mainImage.attr('src', src);
 
-      var div = jpip.element;
-      div.appendChild(mainImage);
+      $(options.element).append(mainImage);
     }
 
     function zoom(e) {
@@ -281,44 +239,44 @@
     }
 
     function zoomIn() {
-      if ((jpip.width <= (jpip.maxWidth / 2)) && (jpip.height <= (jpip.maxHeight / 2))) {
-        jpip.level++;
-        jpip.width = jpip.maxWidth;
-        jpip.height = jpip.maxHeight;
+      if ((options.width <= (options.maxWidth / 2)) && (options.height <= (options.maxHeight / 2))) {
+        options.level++;
+        options.width = options.maxWidth;
+        options.height = options.maxHeight;
 
-        for (var i = jpip.level; i < jpip.numLevels; i++) {
-          jpip.width = Math.floor(jpip.width / 2);
-          jpip.height = Math.floor(jpip.height / 2);
-        }
-
-        if (jpip.xFit == 1) {
-          jpip.regionX = jpip.width / 2 - (jpip.regionWidth / 2);
-        }
-        else if (jpip.width > jpip.regionWidth) {
-          jpip.regionX = jpip.regionX * 2 + jpip.regionWidth / 2;
+        for (var i = options.level; i < options.numLevels; i++) {
+          options.width = Math.floor(options.width / 2);
+          options.height = Math.floor(options.height / 2);
         }
 
-        if (jpip.regionX > jpip.regionWidth) {
-          jpip.regionX = jpip.width - jpip.regionWidth;
+        if (options.xFit == 1) {
+          options.regionX = options.width / 2 - (options.regionWidth / 2);
+        }
+        else if (options.width > options.regionWidth) {
+          options.regionX = options.regionX * 2 + options.regionWidth / 2;
         }
 
-        if (jpip.regionX < 0) {
-          jpip.regionX = 0;
+        if (options.regionX > options.regionWidth) {
+          options.regionX = options.width - options.regionWidth;
         }
 
-        if (jpip.yFit == 1) {
-          jpip.regionY = jpip.height / 2 - (jpip.regionHeight / 2);
-        }
-        else if (jpip.height > jpip.regionHeight) {
-          jpip.regionY = jpip.regionY * 2 + jpip.regionHeight / 2;
+        if (options.regionX < 0) {
+          options.regionX = 0;
         }
 
-        if (jpip.regionY > jpip.regionHeight) {
-          jpip.regionY = jpip.height - jpip.regionHeight;
+        if (options.yFit == 1) {
+          options.regionY = options.height / 2 - (options.regionHeight / 2);
+        }
+        else if (options.height > options.regionHeight) {
+          options.regionY = options.regionY * 2 + options.regionHeight / 2;
         }
 
-        if (jpip.regionY < 0) {
-          jpip.regionY = 0;
+        if (options.regionY > options.regionHeight) {
+          options.regionY = options.height - options.regionHeight;
+        }
+
+        if (options.regionY < 0) {
+          options.regionY = 0;
         }
 
         positionViewport();
@@ -328,42 +286,42 @@
     }
 
     function zoomOut() {
-      if ((jpip.width > jpip.regionWidth) || (jpip.height > jpip.regionHeight)) {
-        jpip.level--;
-        jpip.width = jpip.maxWidth;
-        jpip.height = jpip.maxHeight;
+      if ((options.width > options.regionWidth) || (options.height > options.regionHeight)) {
+        options.level--;
+        options.width = options.maxWidth;
+        options.height = options.maxHeight;
 
-        for (var i = jpip.level; i < jpip.numLevels; i++) {
-          jpip.width = Math.floor(jpip.width / 2);
-          jpip.height = Math.floor(jpip.height / 2);
+        for (var i = options.level; i < options.numLevels; i++) {
+          options.width = Math.floor(options.width / 2);
+          options.height = Math.floor(options.height / 2);
         }
 
-        jpip.regionX = jpip.regionX / 2 - (jpip.regionWidth / 4);
+        options.regionX = options.regionX / 2 - (options.regionWidth / 4);
 
-        if (jpip.regionX + jpip.regionWidth > jpip.width) {
-          jpip.regionX = jpip.width - jpip.regionWidth;
+        if (options.regionX + options.regionWidth > options.width) {
+          options.regionX = options.width - options.regionWidth;
         }
 
-        if (jpip.regionX < 0) {
-          jpip.xFit = 1;
-          jpip.regionX = 0;
-        }
-        else {
-          jpip.xFit = 0;
-        }
-
-        jpip.regionY = jpip.regionY / 2 - (jpip.regionHeight / 4);
-
-        if (jpip.regionY + jpip.regionHeight > jpip.height) {
-          jpip.regionY = jpip.height - jpip.regionHeight;
-        }
-
-        if (jpip.regionY < 0) {
-          jpip.yFit = 1;
-          jpip.regionY = 0;
+        if (options.regionX < 0) {
+          options.xFit = 1;
+          options.regionX = 0;
         }
         else {
-          jpip.yFit = 0;
+          options.xFit = 0;
+        }
+
+        options.regionY = options.regionY / 2 - (options.regionHeight / 4);
+
+        if (options.regionY + options.regionHeight > options.height) {
+          options.regionY = options.height - options.regionHeight;
+        }
+
+        if (options.regionY < 0) {
+          options.yFit = 1;
+          options.regionY = 0;
+        }
+        else {
+          options.yFit = 0;
         }
 
         positionViewport();
@@ -374,14 +332,14 @@
 
     function checkBounds(x, y) {
 
-      var localX = jpip.regionX + x;
-      var localY = jpip.regionY + y;
+      var localX = options.regionX + x;
+      var localY = options.regionY + y;
 
-      if (localX > jpip.width - jpip.regionWidth) {
-        localX = jpip.width - jpip.regionWidth;
+      if (localX > options.width - options.regionWidth) {
+        localX = options.width - options.regionWidth;
       }
-      if (localY > jpip.height - jpip.regionHeight) {
-        localY = jpip.height - jpip.regionHeight;
+      if (localY > options.height - options.regionHeight) {
+        localY = options.height - options.regionHeight;
       }
 
       if (localX < 0) {
@@ -392,8 +350,8 @@
         localY = 0;
       }
 
-      jpip.regionX = localX;
-      jpip.regionY = localY;
+      options.regionX = localX;
+      options.regionY = localY;
     }
 
     function scrollTo(x, y) {
@@ -405,19 +363,19 @@
     }
 
     function left() {
-      scrollTo(-jpip.regionWidth/3, 0);
+      scrollTo(-options.regionWidth/3, 0);
     }
 
     function up() {
-      scrollTo(0, -jpip.regionHeight/3);
+      scrollTo(0, -options.regionHeight/3);
     }
 
     function right() {
-      scrollTo(jpip.regionWidth/3, 0);
+      scrollTo(options.regionWidth/3, 0);
     }
 
     function down() {
-      scrollTo(0, jpip.regionHeight/3);
+      scrollTo(0, options.regionHeight/3);
     }
 
     function reset() {
@@ -439,16 +397,16 @@
       else {
         moveX = e.position.left;
         moveY = e.position.top;
-        if((Math.abs(moveX - jpip.viewportPosition[0]) < 3) && (Math.abs(moveY - jpip.viewportPosition[1]) < 3)) {
+        if((Math.abs(moveX - options.viewportPosition[0]) < 3) && (Math.abs(moveY - options.viewportPosition[1]) < 3)) {
           return;
         }
       }
 
-      if (moveX > (jpip.minX - viewportWidth)) {
-        moveX = jpip.minX - viewportWidth;
+      if (moveX > (options.minX - viewportWidth)) {
+        moveX = options.minX - viewportWidth;
       }
-      if (moveY > (jpip.minY - viewportHeight)) {
-        moveY = jpip.minY - viewportHeight;
+      if (moveY > (options.minY - viewportHeight)) {
+        moveY = options.minY - viewportHeight;
       }
 
       if (moveX < 0) {
@@ -458,11 +416,11 @@
         moveY = 0;
       }
 
-      jpip.regionX = Math.round(moveX * jpip.width / jpip.minX);
-      jpip.regionY = Math.round(moveY * jpip.height / jpip.minY);
+      options.regionX = Math.round(moveX * options.width / options.minX);
+      options.regionY = Math.round(moveY * options.height / options.minY);
 
-      jpip.viewportPosition[0] = moveY;
-      jpip.viewportPosition[1] = moveX;
+      options.viewportPosition[0] = moveY;
+      options.viewportPosition[1] = moveX;
 
       if (e.event) {
         positionViewport();
@@ -472,49 +430,49 @@
     }
 
     function recenter() {
-      jpip.regionX = (jpip.width - jpip.regionWidth) / 2;
-      jpip.regionY = (jpip.height - jpip.regionHeight) / 2;
+      options.regionX = (options.width - options.regionWidth) / 2;
+      options.regionY = (options.height - options.regionHeight) / 2;
     }
 
     function positionViewport() {
-      var left = (jpip.regionX / jpip.width) * (jpip.minX);
-      if (left > jpip.minX) {
-        left = jpip.minX;
+      var left = (options.regionX / options.width) * (options.minX);
+      if (left > options.minX) {
+        left = options.minX;
       }
       if (left < 0) {
         left = 0;
       }
 
-      var top = (jpip.regionY / jpip.height) * (jpip.minY);
-      if (top > jpip.minY) {
-        top = jpip.minY;
+      var top = (options.regionY / options.height) * (options.minY);
+      if (top > options.minY) {
+        top = options.minY;
       }
       if(top < 0) {
         top = 0;
       }
 
-      var width = (jpip.regionWidth / jpip.width) * (jpip.minX);
-      if (left + width > jpip.minX) {
-        width = jpip.minX - left;
+      var width = (options.regionWidth / options.width) * (options.minX);
+      if (left + width > options.minX) {
+        width = options.minX - left;
       }
 
-      var height = (jpip.regionHeight / jpip.height) * (jpip.minY) ;
-      if (top + height > jpip.minY) {
-        height = jpip.minY - top;
+      var height = (options.regionHeight / options.height) * (options.minY) ;
+      if (top + height > options.minY) {
+        height = options.minY - top;
       }
 
-      if (width < jpip.minX) {
-        jpip.xFit = 0;
+      if (width < options.minX) {
+        options.xFit = 0;
       }
       else {
-        jpip.xFit = 1;
+        options.xFit = 1;
       }
 
-      if (height < jpip.minY) {
-        jpip.yFit = 0;
+      if (height < options.minY) {
+        options.yFit = 0;
       }
       else {
-        jpip.yFit = 1;
+        options.yFit = 1;
       }
 
       top = Math.floor(top);
@@ -522,8 +480,8 @@
       width = Math.floor(width);
       height = Math.floor(height);
 
-      jpip.viewportPosition[0] = top;
-      jpip.viewportPosition[1] = left;
+      options.viewportPosition[0] = top;
+      options.viewportPosition[1] = left;
 
       var viewport = document.getElementById('viewport');
 
