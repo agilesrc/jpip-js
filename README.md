@@ -2,7 +2,7 @@
 
 A lightweight jQuery plugin for viewing JPIP images.
 
-*© 2001-2015 AgileSrc LLC.*
+*Copyright 2001-2015 AgileSrc LLC.*
 
 ## Introduction
 The goal when designing jpip.js was to have a lightweight yet user-friendly user interface for viewing JPIP images on a variety of devices.
