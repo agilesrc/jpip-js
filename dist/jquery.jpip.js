@@ -1,14 +1,20 @@
 /**
- * Copyright 2001-2015 AgileSrc LLC
+ * Copyright © 2001-2015 AgileSrc LLC.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  *
- * This file is a part of the jpip-js project, which is licensed under Version 3 of the GNU General
- * Public License, a copy of which can be found in LICENSE.txt at the root of the project directory,
- * or at http://www.gnu.org/licenses/gpl.txt.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 (function ($) {
   $.fn.jpipViewer = function(image, options) {
     return this.each(function() {

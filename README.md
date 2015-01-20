@@ -2,8 +2,6 @@
 
 A lightweight jQuery plugin for viewing JPIP images.
 
-*Copyright 2001-2015 AgileSrc LLC.*
-
 ## Introduction
 The goal when designing jpip.js was to have a lightweight yet user-friendly user interface for viewing JPIP images on a variety of devices.
 
@@ -44,3 +42,20 @@ $('#jpipViewer').jpipViewer('some_image.jp2', { /* options */ });
 | `server`         | String  | `"http://localhost:8080/adore-djatoka/resolver"` | The path to where your copy of the Djatoka server is running.
 | `initialZoom`    | Number  | `1`                                              | An integer greater than or equal to 1 stating how much the view should initially be zoomed in
 | `showNavButtons` | Boolean | `true`                                           | Whether or not the navigation portion of the UI should be visible
+
+## License
+
+*Copyright © 2001-2015 AgileSrc LLC.*
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
