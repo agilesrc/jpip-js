@@ -12,7 +12,7 @@ If you have any questions, please feel free to contact us at [support@agilesrc.c
 
 ## Installation
 ```
-bower install jpip --save
+bower install jpip-js --save
 ```
 
 If you're using a dependency injection tool like [wiredep](https://github.com/taptapship/wiredep.git), that's all you'll need to do. However, if you're manually including assets in your HTML, you'll need these files:
