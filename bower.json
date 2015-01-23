@@ -1,10 +1,14 @@
 {
-  "name": "jpip",
+  "name": "jpip-js",
   "version": "0.0.0",
   "authors": [
     "Adam Nutt <adam.nutt@agilesrc.com",
     "Steven Petryk <steven.petryk@agilesrc.com>"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:agilesrc/jpip-js.git"
+  },
   "description": "A JPIP image viewer",
   "main": [
     "dist/jquery.jpip.js",
